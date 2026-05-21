@@ -1,0 +1,22 @@
+body{
+    font-family: Arial, sans-serif;
+}
+
+.hero{
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #000000, #434343);
+    color: white;
+}
+
+.hero h1{
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.hero p{
+    font-size: 22px;
+    margin: 20px 0;
+}
