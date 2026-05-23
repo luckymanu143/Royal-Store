@@ -16,71 +16,227 @@
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<!-- Navbar -->
 
-        <div class="container">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 
-            <a class="navbar-brand fw-bold" href="#">
-                Royal Store
-            </a>
+    <div class="container">
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <a class="navbar-brand fw-bold fs-3" href="#">
+            Royal Store
+        </a>
 
-                <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
 
-            </button>
+            <span class="navbar-toggler-icon"></span>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+        </button>
 
-                <ul class="navbar-nav ms-auto">
+        <div class="collapse navbar-collapse" id="navbarNav">
 
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
-                    </li>
+            <ul class="navbar-nav ms-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Shop</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home</a>
+                </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Cart</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Shop</a>
+                </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Login</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Categories</a>
+                </li>
 
-                </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Cart</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- Hero Section -->
+
+<section class="hero">
+
+    <div class="container text-center text-white">
+
+        <h1>ROYAL STORE</h1>
+
+        <p>Premium Fashion Collection</p>
+
+        <button class="btn btn-warning btn-lg">
+            Shop Now
+        </button>
+
+    </div>
+
+</section>
+
+<!-- Categories -->
+
+<section class="container py-5">
+
+    <h2 class="text-center mb-5">Shop By Category</h2>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="category-card">
+                <h3>T-Shirts</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="category-card">
+                <h3>Shorts</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="category-card">
+                <h3>Track Pants</h3>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Featured Products -->
+
+<section class="container py-5">
+
+    <h2 class="text-center mb-5">Featured Products</h2>
+
+    <div class="row g-4">
+
+        <!-- Product 1 -->
+
+        <div class="col-md-3">
+
+            <div class="product-card">
+
+                <img src="{{ url_for('static', filename='images/tshirt1.jpg') }}" alt="">
+
+                <h4>Black Oversized T-Shirt</h4>
+
+                <p>₹799</p>
+
+                <button class="btn btn-dark w-100">
+                    Add to Cart
+                </button>
 
             </div>
 
         </div>
 
-    </nav>
+        <!-- Product 2 -->
 
-    <!-- Hero Section -->
-    <section class="hero text-center">
+        <div class="col-md-3">
 
-        <div class="container">
+            <div class="product-card">
 
-            <h1>Welcome to Royal Store</h1>
+                <img src="{{ url_for('static', filename='images/shorts1.jpg') }}" alt="">
 
-            <p>Premium T-Shirts, Shorts & Track Pants</p>
+                <h4>Sports Shorts</h4>
 
-            <button class="btn btn-dark btn-lg">
-                Shop Now
-            </button>
+                <p>₹599</p>
+
+                <button class="btn btn-dark w-100">
+                    Add to Cart
+                </button>
+
+            </div>
 
         </div>
 
-    </section>
+        <!-- Product 3 -->
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <div class="col-md-3">
 
-    <!-- JS -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+            <div class="product-card">
+
+                <img src="{{ url_for('static', filename='images/trackpant1.jpg') }}" alt="">
+
+                <h4>Premium Track Pants</h4>
+
+                <p>₹1199</p>
+
+                <button class="btn btn-dark w-100">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Product 4 -->
+
+        <div class="col-md-3">
+
+            <div class="product-card">
+
+                <img src="{{ url_for('static', filename='images/hoodie1.jpg') }}" alt="">
+
+                <h4>Royal Hoodie</h4>
+
+                <p>₹1499</p>
+
+                <button class="btn btn-dark w-100">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Sale Banner -->
+
+<section class="sale-banner">
+
+    <div class="container text-center text-white">
+
+        <h2>UP TO 50% OFF</h2>
+
+        <p>Limited Time Offer</p>
+
+    </div>
+
+</section>
+
+<!-- Footer -->
+
+<footer>
+
+    <div class="container text-center">
+
+        <h4>Royal Store</h4>
+
+        <p>Premium Fashion Store</p>
+
+        <p>© 2026 All Rights Reserved</p>
+
+    </div>
+
+</footer>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
