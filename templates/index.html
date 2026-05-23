@@ -7,16 +7,16 @@
 
     <title>Royal Store</title>
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 <body>
 
-<!-- Navbar -->
+<!-- ================= NAVBAR ================= -->
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 
@@ -64,7 +64,7 @@
 
 </nav>
 
-<!-- Hero Section -->
+<!-- ================= HERO SECTION ================= -->
 
 <section class="hero">
 
@@ -82,7 +82,7 @@
 
 </section>
 
-<!-- Categories -->
+<!-- ================= CATEGORY SECTION ================= -->
 
 <section class="container py-5">
 
@@ -91,28 +91,40 @@
     <div class="row g-4">
 
         <div class="col-md-4">
+
             <div class="category-card">
+
                 <h3>T-Shirts</h3>
+
             </div>
+
         </div>
 
         <div class="col-md-4">
+
             <div class="category-card">
+
                 <h3>Shorts</h3>
+
             </div>
+
         </div>
 
         <div class="col-md-4">
+
             <div class="category-card">
+
                 <h3>Track Pants</h3>
+
             </div>
+
         </div>
 
     </div>
 
 </section>
 
-<!-- Featured Products -->
+<!-- ================= FEATURED PRODUCTS ================= -->
 
 <section class="container py-5">
 
@@ -120,17 +132,19 @@
 
     <div class="row g-4">
 
-        <!-- Product 1 -->
+        <!-- Dynamic Product Loop -->
+
+        {% for product in products %}
 
         <div class="col-md-3">
 
             <div class="product-card">
 
-                <img src="{{ url_for('static', filename='images/tshirt1.jpg') }}" alt="">
+                <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="">
 
-                <h4>Black Oversized T-Shirt</h4>
+                <h4>{{ product.name }}</h4>
 
-                <p>₹799</p>
+                <p>₹{{ product.price }}</p>
 
                 <button class="btn btn-dark w-100">
                     Add to Cart
@@ -140,71 +154,13 @@
 
         </div>
 
-        <!-- Product 2 -->
-
-        <div class="col-md-3">
-
-            <div class="product-card">
-
-                <img src="{{ url_for('static', filename='images/shorts1.jpg') }}" alt="">
-
-                <h4>Sports Shorts</h4>
-
-                <p>₹599</p>
-
-                <button class="btn btn-dark w-100">
-                    Add to Cart
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- Product 3 -->
-
-        <div class="col-md-3">
-
-            <div class="product-card">
-
-                <img src="{{ url_for('static', filename='images/trackpant1.jpg') }}" alt="">
-
-                <h4>Premium Track Pants</h4>
-
-                <p>₹1199</p>
-
-                <button class="btn btn-dark w-100">
-                    Add to Cart
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- Product 4 -->
-
-        <div class="col-md-3">
-
-            <div class="product-card">
-
-                <img src="{{ url_for('static', filename='images/hoodie1.jpg') }}" alt="">
-
-                <h4>Royal Hoodie</h4>
-
-                <p>₹1499</p>
-
-                <button class="btn btn-dark w-100">
-                    Add to Cart
-                </button>
-
-            </div>
-
-        </div>
+        {% endfor %}
 
     </div>
 
 </section>
 
-<!-- Sale Banner -->
+<!-- ================= SALE BANNER ================= -->
 
 <section class="sale-banner">
 
@@ -218,7 +174,7 @@
 
 </section>
 
-<!-- Footer -->
+<!-- ================= FOOTER ================= -->
 
 <footer>
 
@@ -237,6 +193,10 @@
 <!-- Bootstrap JS -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 </html>
