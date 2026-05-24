@@ -1,3 +1,4 @@
+from flask import session
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -54,6 +55,74 @@ def home():
     products = Product.query.all()
 
     return render_template('index.html', products=products)
+
+# ================ Add Cart Route =================
+
+@app.route('/add_to_cart/<int:product_id>')
+def add_to_cart(product_id):
+
+    product = Product.query.get(product_id)
+
+    if 'cart' not in session:
+        session['cart'] = []
+
+    cart = session['cart']
+
+    cart.append({
+        'id': product.id,
+        'name': product.name,
+        'price': product.price,
+        'image': product.image
+    })
+
+    session['cart'] = cart
+
+    return redirect(url_for('cart'))
+
+# ============= Cart Page Route =============
+
+@app.route('/cart')
+def cart():
+
+    cart = session.get('cart', [])
+
+    total = sum(item['price'] for item in cart)
+
+    return render_template(
+        'cart.html',
+        cart=cart,
+        total=total
+    )
+
+# ============== Remove Cart Item Route ===============
+
+@app.route('/remove_from_cart/<int:index>')
+def remove_from_cart(index):
+
+    cart = session.get('cart', [])
+
+    if len(cart) > index:
+        cart.pop(index)
+
+    session['cart'] = cart
+
+    return redirect(url_for('cart'))
+
+# =========== Create Checkout Route ============
+
+@app.route('/checkout')
+@login_required
+def checkout():
+
+    cart = session.get('cart', [])
+
+    total = sum(item['price'] for item in cart)
+
+    return render_template(
+        'checkout.html',
+        cart=cart,
+        total=total
+    )
 
 # ================= REGISTER =================
 
