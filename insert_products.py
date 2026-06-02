@@ -2,41 +2,44 @@ from app import app, db, Product
 
 with app.app_context():
 
-    # Product 1
-    product1 = Product(
-        name="Black Oversized T-Shirt",
-        price=799,
-        image="tshirt1.jpg"
-    )
+    products = [
 
-    # Product 2
-    product2 = Product(
-        name="Sports Shorts",
-        price=599,
-        image="shorts1.jpg"
-    )
+        Product(
+            name="Black Oversized T-Shirt",
+            price=799,
+            image="tshirt1.jpg",
+            category="T-Shirts",
+            description="Premium oversized cotton t-shirt with comfortable fit."
+        ),
 
-    # Product 3
-    product3 = Product(
-        name="Premium Track Pants",
-        price=1199,
-        image="trackpant1.jpg"
-    )
+        Product(
+            name="Sports Shorts",
+            price=599,
+            image="shorts1.jpg",
+            category="Shorts",
+            description="Lightweight sports shorts suitable for gym and outdoor activities."
+        ),
 
-    # Product 4
-    product4 = Product(
-        name="Royal Hoodie",
-        price=1499,
-        image="hoodie1.jpg"
-    )
+        Product(
+            name="Premium Track Pants",
+            price=1199,
+            image="trackpant1.jpg",
+            category="Track Pants",
+            description="Premium quality track pants designed for comfort and style."
+        ),
 
-    # Add products to database
-    db.session.add(product1)
-    db.session.add(product2)
-    db.session.add(product3)
-    db.session.add(product4)
+        Product(
+            name="Royal Hoodie",
+            price=1499,
+            image="hoodie1.jpg",
+            category="Hoodies",
+            description="Luxury hoodie made with soft cotton fabric."
+        )
 
-    # Save changes
+    ]
+
+    db.session.add_all(products)
+
     db.session.commit()
 
-    print("Products Added Successfully")
+    print("Products inserted successfully!")

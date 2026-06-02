@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -35,11 +36,100 @@ class Product(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(150), nullable=False)
 
     price = db.Column(db.Integer, nullable=False)
 
     image = db.Column(db.String(200), nullable=False)
+
+    category = db.Column(db.String(100))
+
+    description = db.Column(db.Text)
+
+# ================= Add Order Model =================
+
+class Order(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, nullable=False)
+
+    total = db.Column(db.Integer, nullable=False)
+
+    status = db.Column(
+        db.String(50),
+        default="Order Placed"
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+# ================= Add OrderItem Model =================
+
+class OrderItem(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    order_id = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    product_name = db.Column(
+        db.String(150),
+        nullable=False
+    )
+
+    price = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    quantity = db.Column(
+        db.Integer,
+        default=1
+    )
+
+# ================= RUN APP =================
+
+@app.route('/success')
+@login_required
+def success():
+
+    cart = session.get('cart', [])
+
+    total = sum(item['price'] for item in cart)
+
+    order = Order(
+        user_id=current_user.id,
+        total=total,
+        status="Order Placed"
+    )
+
+    db.session.add(order)
+
+    db.session.commit()
+
+    session['cart'] = []
+
+    return render_template('success.html')
+
+# ============ Add My Orders Route ===========
+
+@app.route('/my_orders')
+@login_required
+def my_orders():
+
+    orders = Order.query.filter_by(
+        user_id=current_user.id
+    ).all()
+
+    return render_template(
+        'my_orders.html',
+        orders=orders
+    )
 
 # ================= LOAD USER =================
 
