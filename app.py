@@ -92,6 +92,103 @@ class OrderItem(db.Model):
         default=1
     )
 
+# =============== Admin ================
+
+@app.route('/admin')
+@login_required
+def admin():
+
+    products = Product.query.all()
+
+    orders = Order.query.all()
+
+    total_products = Product.query.count()
+
+    total_orders = Order.query.count()
+
+    total_users = User.query.count()
+
+    return render_template(
+        'admin.html',
+        products=products,
+        orders=orders,
+        total_products=total_products,
+        total_orders=total_orders,
+        total_users=total_users
+    )    
+
+# ============ Add Product Route ============
+
+@app.route('/add_product', methods=['GET', 'POST'])
+@login_required
+def add_product():
+
+    if request.method == 'POST':
+
+        product = Product(
+
+            name=request.form['name'],
+
+            price=request.form['price'],
+
+            image=request.form['image'],
+
+            category=request.form['category'],
+
+            description=request.form['description']
+
+        )
+
+        db.session.add(product)
+
+        db.session.commit()
+
+        return redirect('/admin')
+
+    return render_template('add_product.html')
+
+# ============= Delete Product Route =============
+
+@app.route('/delete_product/<int:id>')
+@login_required
+def delete_product(id):
+
+    product = Product.query.get_or_404(id)
+
+    db.session.delete(product)
+
+    db.session.commit()
+
+    return redirect('/admin')
+# ============== Edit Product Route ===============
+
+@app.route('/edit_product/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_product(id):
+
+    product = Product.query.get_or_404(id)
+
+    if request.method == 'POST':
+
+        product.name = request.form['name']
+
+        product.price = request.form['price']
+
+        product.image = request.form['image']
+
+        product.category = request.form['category']
+
+        product.description = request.form['description']
+
+        db.session.commit()
+
+        return redirect('/admin')
+
+    return render_template(
+        'edit_product.html',
+        product=product
+    )
+
 # ================= RUN APP =================
 
 @app.route('/success')
