@@ -1,1 +1,1 @@
-console.log("Royal Store Loaded Successfully");
+console.log("Bundle Loaded Successfully");
