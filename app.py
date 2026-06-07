@@ -30,6 +30,8 @@ class User(UserMixin, db.Model):
 
     password = db.Column(db.String(200), nullable=False)
 
+    is_admin = db.Column(db.Boolean, default=False)
+
 # ================= PRODUCT MODEL =================
 
 class Product(db.Model):
@@ -98,6 +100,9 @@ class OrderItem(db.Model):
 @login_required
 def admin():
 
+    if not current_user.is_admin:
+        return redirect(url_for('home'))
+
     products = Product.query.all()
 
     orders = Order.query.all()
@@ -115,8 +120,7 @@ def admin():
         total_products=total_products,
         total_orders=total_orders,
         total_users=total_users
-    )    
-
+    )
 # ============ Add Product Route ============
 
 @app.route('/add_product', methods=['GET', 'POST'])
