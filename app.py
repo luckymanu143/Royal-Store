@@ -355,6 +355,9 @@ def login():
 
             login_user(user)
 
+            print("Logged in user:", user.email)
+            print("Admin:", user.is_admin)
+
             return redirect(url_for('home'))
 
     return render_template('login.html')
