@@ -192,6 +192,32 @@ def edit_product(id):
         'edit_product.html',
         product=product
     )
+# ============== Orders ================
+
+@app.route('/orders')
+@login_required
+def orders():
+
+    orders = Order.query.all()
+
+    return render_template(
+        'orders.html',
+        orders=orders
+    )
+
+# ================ Update order ==============
+
+@app.route('/update_order/<int:id>/<status>')
+@login_required
+def update_order(id, status):
+
+    order = Order.query.get_or_404(id)
+
+    order.status = status
+
+    db.session.commit()
+
+    return redirect('/orders')
 
 # ================= RUN APP =================
 
