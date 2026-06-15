@@ -365,6 +365,34 @@ def register():
 
     return render_template('register.html')
 
+# ============== Search ==================
+
+@app.route('/search')
+def search():
+
+    query = request.args.get('query')
+
+    products = Product.query.filter(
+        Product.name.contains(query)
+    ).all()
+
+    return render_template(
+        'search.html',
+        products=products
+    )
+
+# ============== Product Details page ================
+
+@app.route('/product/<int:id>')
+def product_detail(id):
+
+    product = Product.query.get_or_404(id)
+
+    return render_template(
+        'product_detail.html',
+        product=product
+    )
+
 # ================= LOGIN =================
 
 @app.route('/login', methods=['GET', 'POST'])
