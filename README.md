@@ -1,2 +1,2 @@
-# Royal-Store
+# Bundle
 E-commerce Website Setup
