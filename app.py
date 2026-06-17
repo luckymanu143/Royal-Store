@@ -1,3 +1,4 @@
+import razorpay
 from flask import session
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -12,6 +13,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///store.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+# Rozopay
+
+RAZORPAY_KEY_ID = "rzp_test_T2n0GTzEaKlon3"
+RAZORPAY_SECRET = "3lQOHk45NlTWMBHor3hW7q71"
+
+client = razorpay.Client(
+    auth=(RAZORPAY_KEY_ID, RAZORPAY_SECRET)
+)
 
 # Login Manager
 login_manager = LoginManager()
@@ -58,6 +68,16 @@ class Order(db.Model):
 
     total = db.Column(db.Integer, nullable=False)
 
+    address = db.Column(db.Text)
+
+    city = db.Column(db.String(100))
+
+    state = db.Column(db.String(100))
+
+    pincode = db.Column(db.String(20))
+
+    mobile = db.Column(db.String(20))
+
     status = db.Column(
         db.String(50),
         default="Order Placed"
@@ -67,7 +87,6 @@ class Order(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
-
 # ================= Add OrderItem Model =================
 
 class OrderItem(db.Model):
@@ -335,10 +354,18 @@ def checkout():
 
     total = sum(item['price'] for item in cart)
 
+    payment = client.order.create({
+        "amount": total * 100,
+        "currency": "INR",
+        "payment_capture": 1
+    })
+
     return render_template(
         'checkout.html',
         cart=cart,
-        total=total
+        total=total,
+        payment=payment,
+        razorpay_key=RAZORPAY_KEY_ID
     )
 
 # ================= REGISTER =================
