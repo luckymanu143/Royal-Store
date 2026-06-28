@@ -16,8 +16,8 @@ db = SQLAlchemy(app)
 
 # Rozopay
 
-RAZORPAY_KEY_ID = "rzp_test_T2n0GTzEaKlon3"
-RAZORPAY_SECRET = "3lQOHk45NlTWMBHor3hW7q71"
+RAZORPAY_KEY_ID = "rzp_test_T5wtjQmI3Rue2E"
+RAZORPAY_SECRET = "Cj84l0AXb1rQ5mOAa9X7l4vu"
 
 client = razorpay.Client(
     auth=(RAZORPAY_KEY_ID, RAZORPAY_SECRET)
@@ -58,35 +58,99 @@ class Product(db.Model):
 
     description = db.Column(db.Text)
 
-# ================= Add Order Model =================
+# ================= ORDER MODEL =================
 
 class Order(db.Model):
 
-    id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = "order"
 
-    user_id = db.Column(db.Integer, nullable=False)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
-    total = db.Column(db.Integer, nullable=False)
+    # Customer
 
-    address = db.Column(db.Text)
+    user_id = db.Column(
+        db.Integer,
+        nullable=False
+    )
 
-    city = db.Column(db.String(100))
+    fullname = db.Column(
+        db.String(150),
+        nullable=False
+    )
 
-    state = db.Column(db.String(100))
+    mobile = db.Column(
+        db.String(20),
+        nullable=False
+    )
 
-    pincode = db.Column(db.String(20))
+    # Delivery Address
 
-    mobile = db.Column(db.String(20))
+    address = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    city = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    state = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    pincode = db.Column(
+        db.String(20),
+        nullable=False
+    )
+
+    landmark = db.Column(
+        db.String(200)
+    )
+
+    instructions = db.Column(
+        db.Text
+    )
+
+    # Order Information
+
+    total = db.Column(
+        db.Integer,
+        nullable=False
+    )
 
     status = db.Column(
         db.String(50),
         default="Order Placed"
     )
 
+    # Payment
+
+    payment_method = db.Column(
+        db.String(50),
+        nullable=False
+    )
+
+    payment_status = db.Column(
+        db.String(50),
+        default="Pending"
+    )
+
+    payment_id = db.Column(
+        db.String(200)
+    )
+
+    # Date
+
     created_at = db.Column(
         db.DateTime,
         default=datetime.utcnow
     )
+
 # ================= Add OrderItem Model =================
 
 class OrderItem(db.Model):
@@ -140,6 +204,23 @@ def admin():
         total_orders=total_orders,
         total_users=total_users
     )
+
+# ============ Users =============
+
+@app.route('/users')
+@login_required
+def users():
+
+    if not current_user.is_admin:
+        return redirect(url_for('home'))
+
+    users = User.query.all()
+
+    return render_template(
+        'users.html',
+        users=users
+    )
+
 # ============ Add Product Route ============
 
 @app.route('/add_product', methods=['GET', 'POST'])
@@ -217,7 +298,10 @@ def edit_product(id):
 @login_required
 def orders():
 
-    orders = Order.query.all()
+    if not current_user.is_admin:
+        return redirect(url_for('home'))
+
+    orders = Order.query.order_by(Order.created_at.desc()).all()
 
     return render_template(
         'orders.html',
@@ -237,30 +321,6 @@ def update_order(id, status):
     db.session.commit()
 
     return redirect('/orders')
-
-# ================= RUN APP =================
-
-@app.route('/success')
-@login_required
-def success():
-
-    cart = session.get('cart', [])
-
-    total = sum(item['price'] for item in cart)
-
-    order = Order(
-        user_id=current_user.id,
-        total=total,
-        status="Order Placed"
-    )
-
-    db.session.add(order)
-
-    db.session.commit()
-
-    session['cart'] = []
-
-    return render_template('success.html')
 
 # ============ Add My Orders Route ===========
 
@@ -313,7 +373,7 @@ def add_to_cart(product_id):
 
     session['cart'] = cart
 
-    return redirect(url_for('cart'))
+    return redirect(url_for('home'))
 
 # ============= Cart Page Route =============
 
@@ -344,7 +404,117 @@ def remove_from_cart(index):
 
     return redirect(url_for('cart'))
 
-# =========== Create Checkout Route ============
+# ================= ADDRESS =================
+
+@app.route('/address', methods=['GET', 'POST'])
+@login_required
+def address():
+
+    if request.method == 'POST':
+
+        # Save delivery details in session
+
+        session['fullname'] = request.form['fullname']
+        session['mobile'] = request.form['mobile']
+        session['address'] = request.form['address']
+        session['city'] = request.form['city']
+        session['state'] = request.form['state']
+        session['pincode'] = request.form['pincode']
+        session['landmark'] = request.form.get('landmark')
+        session['instructions'] = request.form.get('instructions')
+
+        # Payment Method
+
+        payment_method = request.form['payment_method']
+
+        session['payment_method'] = payment_method
+
+        # If user selected Online Payment
+
+        if payment_method == "Online":
+
+            return redirect(url_for('checkout'))
+
+        # If user selected Cash On Delivery
+
+        else:
+
+            return redirect(url_for('success'))
+
+    return render_template('address.html')
+
+# ================= SUCCESS =================
+
+@app.route('/success')
+@login_required
+def success():
+
+    cart = session.get('cart', [])
+
+    if not cart:
+        return redirect(url_for('home'))
+
+    total = sum(item['price'] for item in cart)
+
+    order = Order(
+
+        user_id=current_user.id,
+
+        fullname=session.get('fullname'),
+
+        mobile=session.get('mobile'),
+
+        address=session.get('address'),
+
+        city=session.get('city'),
+
+        state=session.get('state'),
+
+        pincode=session.get('pincode'),
+
+        landmark=session.get('landmark'),
+
+        instructions=session.get('instructions'),
+
+        payment_method=session.get('payment_method'),
+
+        payment_status="Paid" if session.get('payment_method') == "Online" else "Pending",
+
+        payment_id=session.get('payment_id'),
+
+        total=total,
+
+        status="Order Placed"
+
+    )
+
+    db.session.add(order)
+
+    db.session.commit()
+
+    # Clear Cart
+
+    session['cart'] = []
+
+    # Clear Address Session
+
+    session.pop('fullname', None)
+    session.pop('mobile', None)
+    session.pop('address', None)
+    session.pop('city', None)
+    session.pop('state', None)
+    session.pop('pincode', None)
+    session.pop('landmark', None)
+    session.pop('instructions', None)
+    session.pop('payment_method', None)
+    session.pop('payment_id', None)
+
+    return render_template(
+        'success.html',
+        order=order
+    )
+
+# ================= CHECKOUT =================
 
 @app.route('/checkout')
 @login_required
@@ -352,21 +522,45 @@ def checkout():
 
     cart = session.get('cart', [])
 
+    if not cart:
+        return redirect(url_for('cart'))
+
     total = sum(item['price'] for item in cart)
 
-    payment = client.order.create({
-        "amount": total * 100,
-        "currency": "INR",
-        "payment_capture": 1
-    })
+    # Save total in session
+    session['total'] = total
 
-    return render_template(
-        'checkout.html',
-        cart=cart,
-        total=total,
-        payment=payment,
-        razorpay_key=RAZORPAY_KEY_ID
-    )
+    try:
+
+        payment = client.order.create({
+
+            "amount": total * 100,      # Amount in paise
+
+            "currency": "INR",
+
+            "payment_capture": 1
+
+        })
+
+        return render_template(
+
+            "checkout.html",
+
+            cart=cart,
+
+            total=total,
+
+            payment=payment,
+
+            razorpay_key=RAZORPAY_KEY_ID
+
+        )
+
+    except Exception as e:
+
+        print("Razorpay Error:", e)
+
+        return f"Razorpay Error: {str(e)}"
 
 # ================= REGISTER =================
 

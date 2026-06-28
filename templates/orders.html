@@ -31,18 +31,22 @@
                 <thead>
 
                     <tr>
-
+                        
                         <th>Order ID</th>
 
-                        <th>User ID</th>
+                        <th>Customer</th>
+
+                        <th>Mobile</th>
+
+                        <th>Delivery Address</th>
+
+                        <th>Payment</th>
 
                         <th>Total</th>
 
                         <th>Status</th>
 
-                        <th>Order Date</th>
-
-                        <th>Actions</th>
+                        <th>Action</th>
 
                     </tr>
 
@@ -50,42 +54,83 @@
 
                 <tbody>
 
-                    {% for order in orders %}
+                            {% for order in orders %}
 
-                    <tr>
+                        <tr>
 
-                        <td>#{{ order.id }}</td>
-
-                        <td>{{ order.user_id }}</td>
-
-                        <td>₹{{ order.total }}</td>
+                            <td>#{{ order.id }}</td>
 
                         <td>
 
-                            {% if order.status == "Order Placed" %}
-                                <span class="badge bg-primary">
-                                    {{ order.status }}
-                                </span>
+                            {{ order.fullname }}
 
-                            {% elif order.status == "Packed" %}
-                                <span class="badge bg-warning text-dark">
-                                    {{ order.status }}
-                                </span>
+                        </td>
 
-                            {% elif order.status == "Shipped" %}
-                                <span class="badge bg-info text-dark">
-                                    {{ order.status }}
-                                </span>
+                        <td>
 
-                            {% elif order.status == "Delivered" %}
-                                <span class="badge bg-success">
-                                    {{ order.status }}
-                                </span>
+                            {{ order.mobile }}
+
+                        </td>
+
+                        <td>
+
+                                <strong>Address:</strong>
+
+                            {{ order.address }}
+
+                        <br>
+
+                                <strong>City:</strong>
+
+                            {{ order.city }}
+
+                        <br>
+
+                                <strong>State:</strong>
+
+                            {{ order.state }}
+
+                        <br>
+
+                                <strong>Pincode:</strong>
+
+                            {{ order.pincode }}
+
+                        <br>
+
+                                <strong>Landmark:</strong>
+
+                            {{ order.landmark }}
+
+                        <br>
+
+                                <strong>Instructions:</strong>
+
+                            {{ order.instructions }}
+
+                        </td>
+
+                        <td>
+
+                            {{ order.payment_method }}
+
+                        <br>
+
+                            {% if order.payment_status == "Paid" %}
+
+                        <span class="badge bg-success">
+
+                                Paid
+
+                        </span>
 
                             {% else %}
-                                <span class="badge bg-secondary">
-                                    {{ order.status }}
-                                </span>
+
+                        <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                        </span>
 
                             {% endif %}
 
@@ -93,42 +138,52 @@
 
                         <td>
 
-                            {{ order.created_at.strftime('%d-%m-%Y') }}
+                            ₹{{ order.total }}
 
                         </td>
 
                         <td>
 
-                            <div class="btn-group">
+                        <span class="badge bg-info">
 
-                                <a href="/update_order/{{ order.id }}/Packed"
-                                   class="btn btn-warning btn-sm">
+                            {{ order.status }}
 
-                                   Packed
-
-                                </a>
-
-                                <a href="/update_order/{{ order.id }}/Shipped"
-                                   class="btn btn-info btn-sm">
-
-                                   Shipped
-
-                                </a>
-
-                                <a href="/update_order/{{ order.id }}/Delivered"
-                                   class="btn btn-success btn-sm">
-
-                                   Delivered
-
-                                </a>
-
-                            </div>
+                        </span>
 
                         </td>
 
+                        <td>
+
+                    <a href="/update_order/{{ order.id }}/Packed"
+                        class="btn btn-warning btn-sm mb-1">
+
+                            Packed
+
+                    </a>
+
+                    <br>
+
+                    <a href="/update_order/{{ order.id }}/Shipped"
+                        class="btn btn-primary btn-sm mb-1">
+
+                            Shipped
+
+                    </a>
+
+                    <br>
+
+                    <a href="/update_order/{{ order.id }}/Delivered"
+                        class="btn btn-success btn-sm">
+
+                            Delivered
+
+                    </a>
+
+                    </td>
+
                     </tr>
 
-                    {% endfor %}
+                            {% endfor %}
 
                 </tbody>
 
