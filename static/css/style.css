@@ -1,181 +1,353 @@
-body{
-    font-family: Arial, sans-serif;
-    background-color: #111;
-    color: white;
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
 
-/* ================= NAVBAR ================= */
+body{
+
+    background:#F8F9FA;
+
+    color:#1F2937;
+
+}
+
+/* Navbar */
 
 .navbar{
-    background-color: #000 !important;
+
+    background:#0A3D91 !important;
+
 }
 
 .navbar-brand{
-    color: #f5c542 !important;
-    font-weight: bold;
+
+    color:#FFC107 !important;
+
+    font-size:28px;
+
+    font-weight:bold;
+
 }
 
 .nav-link{
-    color: white !important;
-    transition: 0.3s;
+
+    color:white !important;
+
+    transition:.3s;
+
 }
 
 .nav-link:hover{
-    color: #f5c542 !important;
+
+    color:#FFC107 !important;
+
 }
 
-/* ================= HERO SECTION ================= */
+/* Hero */
 
 .hero{
-    height: 90vh;
-    background: linear-gradient(rgba(0,0,0,0.6),
-    rgba(0,0,0,0.6)),
-    url('../images/banner.jpg');
 
-    background-size: cover;
-    background-position: center;
+    background:linear-gradient(135deg,#0A3D91,#072F6B);
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    color:white;
+
+    padding:90px 20px;
+
+    border-radius:20px;
+
+    margin-bottom:40px;
+
 }
 
 .hero h1{
-    font-size: 75px;
-    font-weight: bold;
-    color: #f5c542;
+
+    font-size:55px;
+
+    font-weight:700;
+
 }
 
 .hero p{
-    font-size: 24px;
-    margin-bottom: 20px;
+
+    font-size:20px;
+
 }
 
-/* ================= BUTTONS ================= */
+/* Cards */
+
+.card{
+
+    border:none;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    transition:.3s;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+
+    background:white;
+
+}
+
+.card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.card img{
+
+    height:280px;
+
+    object-fit:cover;
+
+}
+
+.card-title{
+
+    color:#0A3D91;
+
+    font-weight:600;
+
+}
+
+.price{
+
+    color:#FFC107;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+}
+
+/* Buttons */
+
+.btn-primary{
+
+    background:#0A3D91;
+
+    border:none;
+
+}
+
+.btn-primary:hover{
+
+    background:#072F6B;
+
+}
 
 .btn-warning{
-    background-color: #f5c542 !important;
-    border: none;
-    color: black;
-    font-weight: bold;
+
+    background:#FFC107;
+
+    border:none;
+
+    color:black;
+
+    font-weight:600;
+
 }
 
 .btn-warning:hover{
-    background-color: #d4a017 !important;
+
+    background:#E0A800;
+
 }
 
-/* ================= CATEGORY SECTION ================= */
+.btn-outline-primary{
 
-.category-card{
-    background: #1c1c1c;
-    color: #f5c542;
-    padding: 60px 20px;
-    text-align: center;
-    border-radius: 12px;
-    transition: 0.3s;
-    border: 2px solid #f5c542;
+    border:2px solid #0A3D91;
+
+    color:#0A3D91;
+
 }
 
-.category-card:hover{
-    transform: scale(1.05);
-    background: #f5c542;
-    color: black;
+.btn-outline-primary:hover{
+
+    background:#0A3D91;
+
+    color:white;
+
 }
 
-/* ================= PRODUCT CARDS ================= */
+/* Forms */
 
-.product-card{
-    background: #1c1c1c;
-    color: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0px 0px 10px rgba(245, 197, 66, 0.3);
-    transition: 0.3s;
-    border: 1px solid #333;
+.form-control{
+
+    border-radius:10px;
+
 }
 
-.product-card:hover{
-    transform: translateY(-10px);
-    box-shadow: 0px 0px 20px rgba(245, 197, 66, 0.5);
+.form-control:focus{
+
+    border-color:#0A3D91;
+
+    box-shadow:0 0 8px rgba(10,61,145,.25);
+
 }
 
-.product-card img{
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 10px;
+/* Tables */
+
+.table{
+
+    border-radius:10px;
+
+    overflow:hidden;
+
 }
 
-.product-card h4{
-    margin-top: 15px;
-    color: #f5c542;
+.table-dark{
+
+    background:#0A3D91;
+
 }
 
-.product-card p{
-    font-size: 18px;
-    font-weight: bold;
+.table thead{
+
+    background:#0A3D91;
+
+    color:white;
+
 }
 
-/* ================= PRODUCT BUTTON ================= */
+/* Dashboard Cards */
 
-.product-card .btn-dark{
-    background-color: #f5c542;
-    color: black;
-    border: none;
-    font-weight: bold;
+.dashboard-card{
+
+    background:white;
+
+    border-left:6px solid #FFC107;
+
+    border-radius:15px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.1);
+
+    padding:25px;
+
 }
 
-.product-card .btn-dark:hover{
-    background-color: #d4a017;
+.dashboard-card h2{
+
+    color:#0A3D91;
+
 }
 
-/* ================= SALE BANNER ================= */
+.dashboard-card p{
 
-.sale-banner{
-    background: linear-gradient(to right, #000000, #2c2c2c);
-    padding: 80px 0;
+    color:#666;
+
 }
 
-.sale-banner h2{
-    font-size: 55px;
-    font-weight: bold;
-    color: #f5c542;
-}
-
-/* ================= FOOTER ================= */
+/* Footer */
 
 footer{
-    background: #000;
-    color: white;
-    padding: 40px 0;
-    margin-top: 50px;
+
+    background:#0A3D91;
+
+    color:white;
+
+    text-align:center;
+
+    padding:25px;
+
+    margin-top:70px;
+
 }
 
-footer h4{
-    color: #f5c542;
+footer a{
+
+    color:#FFC107;
+
+    text-decoration:none;
+
 }
 
-/* ================= SECTION TITLES ================= */
+/* Badge */
 
-section h2{
-    color: #f5c542;
-    font-weight: bold;
+.badge-status{
+
+    background:#FFC107;
+
+    color:black;
+
+    padding:8px 15px;
+
+    border-radius:50px;
+
 }
 
-/* ================= RESPONSIVE ================= */
+/* Checkout */
 
-@media(max-width:768px){
+.checkout-card{
 
-    .hero h1{
-        font-size: 45px;
-    }
+    background:white;
 
-    .hero p{
-        font-size: 18px;
-    }
+    border-radius:20px;
 
-    .sale-banner h2{
-        font-size: 35px;
-    }
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+
+}
+
+/* Admin */
+
+.admin-title{
+
+    color:#0A3D91;
+
+    font-weight:bold;
+
+}
+
+.admin-menu{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:20px;
+
+}
+
+/* Search */
+
+.search-box{
+
+    border-radius:50px;
+
+}
+
+/* Product */
+
+.product-image{
+
+    border-radius:20px;
+
+}
+
+.product-title{
+
+    color:#0A3D91;
+
+    font-size:35px;
+
+    font-weight:bold;
+
+}
+
+.product-price{
+
+    color:#FFC107;
+
+    font-size:28px;
+
+    font-weight:bold;
 
 }

@@ -1,10 +1,24 @@
-import razorpay
-from flask import session
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
+
 from flask_sqlalchemy import SQLAlchemy
+
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+
 from werkzeug.security import generate_password_hash, check_password_hash
+
+from werkzeug.utils import secure_filename
+
 from datetime import datetime
+
+import razorpay
+
+import os
+
+app = Flask(__name__)
+
+UPLOAD_FOLDER = "static/images"
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 app = Flask(__name__)
 
@@ -227,7 +241,16 @@ def users():
 @login_required
 def add_product():
 
+    if not current_user.is_admin:
+        return redirect(url_for('home'))
+
     if request.method == 'POST':
+
+        image = request.files['image']
+
+        filename = secure_filename(image.filename)
+
+        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         product = Product(
 
@@ -235,7 +258,7 @@ def add_product():
 
             price=request.form['price'],
 
-            image=request.form['image'],
+            image=filename,
 
             category=request.form['category'],
 
@@ -247,7 +270,7 @@ def add_product():
 
         db.session.commit()
 
-        return redirect('/admin')
+        return redirect(url_for('admin'))
 
     return render_template('add_product.html')
 
@@ -278,15 +301,23 @@ def edit_product(id):
 
         product.price = request.form['price']
 
-        product.image = request.form['image']
-
         product.category = request.form['category']
 
         product.description = request.form['description']
 
+        image = request.files['image']
+
+        if image.filename != "":
+
+            filename = secure_filename(image.filename)
+
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            product.image = filename
+
         db.session.commit()
 
-        return redirect('/admin')
+        return redirect(url_for('admin'))
 
     return render_template(
         'edit_product.html',
@@ -412,34 +443,18 @@ def address():
 
     if request.method == 'POST':
 
-        # Save delivery details in session
-
         session['fullname'] = request.form['fullname']
         session['mobile'] = request.form['mobile']
         session['address'] = request.form['address']
         session['city'] = request.form['city']
         session['state'] = request.form['state']
         session['pincode'] = request.form['pincode']
-        session['landmark'] = request.form.get('landmark')
-        session['instructions'] = request.form.get('instructions')
+        session['landmark'] = request.form.get('landmark', '')
+        session['instructions'] = request.form.get('instructions', '')
 
-        # Payment Method
+        session['payment_method'] = "Online"
 
-        payment_method = request.form['payment_method']
-
-        session['payment_method'] = payment_method
-
-        # If user selected Online Payment
-
-        if payment_method == "Online":
-
-            return redirect(url_for('checkout'))
-
-        # If user selected Cash On Delivery
-
-        else:
-
-            return redirect(url_for('success'))
+        return redirect(url_for('checkout'))
 
     return render_template('address.html')
 
@@ -478,7 +493,7 @@ def success():
 
         payment_method=session.get('payment_method'),
 
-        payment_status="Paid" if session.get('payment_method') == "Online" else "Pending",
+        payment_status="Paid",
 
         payment_id=session.get('payment_id'),
 

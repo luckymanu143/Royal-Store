@@ -18,7 +18,7 @@ rel="stylesheet">
 Add Product
 </h2>
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data"></form>
 
 <input type="text"
 name="name"
@@ -32,15 +32,22 @@ class="form-control mb-3"
 placeholder="Price"
 required>
 
-<input type="text"
-name="image"
-class="form-control mb-3"
-placeholder="Image Filename"
-required>
+
 
 <input type="text"
 name="category"
-class="form-control mb-3"
+class="form-control<label class="form-label">
+
+Product Image
+
+</label>
+
+<input
+type="file"
+name="image"
+class="form-control"
+accept="image/*"
+required> mb-3"
 placeholder="Category">
 
 <textarea

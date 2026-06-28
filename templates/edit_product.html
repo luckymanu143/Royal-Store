@@ -65,11 +65,23 @@
                             Image Name
                         </label>
 
-                        <input type="text"
-                               name="image"
-                               class="form-control"
-                               value="{{ product.image }}"
-                               required>
+                        <label class="form-label">
+
+Current Image
+
+</label>
+
+<br>
+
+<img src="{{ url_for('static', filename='images/' + product.image) }}"
+     width="120"
+     class="mb-3">
+
+                    <input
+                        type="file"
+                        name="image"
+                        class="form-control"
+                        accept="image/*">
 
                     </div>
 
