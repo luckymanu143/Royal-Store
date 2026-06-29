@@ -20,8 +20,6 @@ UPLOAD_FOLDER = "static/images"
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-app = Flask(__name__)
-
 app.config['SECRET_KEY'] = 'royalstoresecret'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///store.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -246,6 +244,12 @@ def add_product():
 
     if request.method == 'POST':
 
+        print("Form Submitted")
+
+        print(request.form)
+
+        print(request.files)
+
         image = request.files['image']
 
         filename = secure_filename(image.filename)
@@ -253,22 +257,17 @@ def add_product():
         image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         product = Product(
-
             name=request.form['name'],
-
             price=request.form['price'],
-
             image=filename,
-
             category=request.form['category'],
-
             description=request.form['description']
-
         )
 
         db.session.add(product)
-
         db.session.commit()
+
+        print("Product Added Successfully")
 
         return redirect(url_for('admin'))
 
@@ -341,17 +340,20 @@ def orders():
 
 # ================ Update order ==============
 
-@app.route('/update_order/<int:id>/<status>')
+@app.route('/update_order/<int:order_id>/<status>')
 @login_required
-def update_order(id, status):
+def update_order(order_id, status):
 
-    order = Order.query.get_or_404(id)
+    if not current_user.is_admin:
+        return redirect(url_for('home'))
+
+    order = Order.query.get_or_404(order_id)
 
     order.status = status
 
     db.session.commit()
 
-    return redirect('/orders')
+    return redirect(url_for('orders'))
 
 # ============ Add My Orders Route ===========
 
@@ -436,7 +438,6 @@ def remove_from_cart(index):
     return redirect(url_for('cart'))
 
 # ================= ADDRESS =================
-
 @app.route('/address', methods=['GET', 'POST'])
 @login_required
 def address():
@@ -452,9 +453,15 @@ def address():
         session['landmark'] = request.form.get('landmark', '')
         session['instructions'] = request.form.get('instructions', '')
 
-        session['payment_method'] = "Online"
+        payment_method = request.form['payment_method']
+        session['payment_method'] = payment_method
 
-        return redirect(url_for('checkout'))
+        if payment_method == "Online":
+            return redirect(url_for('checkout'))
+
+        elif payment_method == "COD":
+            session["payment_status"] = "Pending"
+            return redirect(url_for('success'))
 
     return render_template('address.html')
 
@@ -491,13 +498,15 @@ def success():
 
         instructions=session.get('instructions'),
 
+        total=total,
+
         payment_method=session.get('payment_method'),
 
-        payment_status="Paid",
+        payment_status="Paid"
+        if session.get('payment_method') == "Online"
+        else "Pending",
 
         payment_id=session.get('payment_id'),
-
-        total=total,
 
         status="Order Placed"
 
@@ -508,11 +517,9 @@ def success():
     db.session.commit()
 
     # Clear Cart
-
     session['cart'] = []
 
-    # Clear Address Session
-
+    # Clear Checkout Session Data
     session.pop('fullname', None)
     session.pop('mobile', None)
     session.pop('address', None)
