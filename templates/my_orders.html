@@ -1,228 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block title %}My Orders - Bundle{% endblock %}
 
-    <meta charset="UTF-8">
+{% block content %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="container my-5">
 
-    <title>My Orders - Bundle</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    <style>
-
-        body{
-            background: linear-gradient(135deg,#141e30,#243b55);
-            min-height:100vh;
-            color:white;
-        }
-
-        .page-title{
-            color:#ffc107;
-            font-weight:bold;
-        }
-
-        .order-card{
-            border:none;
-            border-radius:20px;
-            overflow:hidden;
-            transition:0.3s;
-        }
-
-        .order-card:hover{
-            transform:translateY(-5px);
-        }
-
-        .status-placed{
-            background:#0d6efd;
-        }
-
-        .status-packed{
-            background:#fd7e14;
-        }
-
-        .status-shipped{
-            background:#20c997;
-        }
-
-        .status-delivered{
-            background:#198754;
-        }
-
-        .status-cancelled{
-            background:#dc3545;
-        }
-
-        .order-header{
-            background:#ffc107;
-            color:black;
-            font-weight:bold;
-        }
-
-        .price{
-            color:#ffc107;
-            font-size:24px;
-            font-weight:bold;
-        }
-
-    </style>
-
-</head>
-
-<body>
-
-<div class="container py-5">
-
-    <h1 class="text-center page-title mb-5">
-        🛍 My Orders
-    </h1>
+    <h2 class="text-center text-warning mb-4">
+        My Orders
+    </h2>
 
     {% if orders %}
 
-        <div class="row">
+    <div class="table-responsive">
 
-            {% for order in orders %}
+        <table class="table table-bordered table-hover shadow">
 
-            <div class="col-md-6 mb-4">
+            <thead class="table-dark">
 
-                <div class="card order-card shadow-lg">
+                <tr>
 
-                    <div class="card-header order-header">
+                    <th>Order ID</th>
+                    <th>Total Amount</th>
+                    <th>Payment</th>
+                    <th>Order Status</th>
+                    <th>Date</th>
 
-                        Order #{{ order.id }}
+                </tr>
 
-                    </div>
+            </thead>
 
-                    <div class="card-body bg-dark text-white">
+            <tbody>
 
-                        <h5>
-                            Total Amount
-                        </h5>
+                {% for order in orders %}
 
-                        <p class="price">
-                            ₹{{ order.total }}
-                        </p>
+                <tr>
 
-                        <h6>
-                            Order Date
-                        </h6>
+                    <td>
+                        #{{ order.id }}
+                    </td>
 
-                        <p>
-                            {% if order.created_at %}
-                                {{ order.created_at.strftime('%d-%m-%Y') }}
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </p>
+                    <td class="text-success fw-bold">
+                        ₹{{ order.total }}
+                    </td>
 
-                        <h6>Status</h6>
+                    <td>
 
-                        {% if order.status == "Order Placed" %}
+                        {% if order.payment_status == "Paid" %}
 
-                        <span class="badge status-placed p-2">
-                            📦 Order Placed
-                        </span>
-
-                        {% elif order.status == "Packed" %}
-
-                        <span class="badge status-packed p-2">
-                            📋 Packed
-                        </span>
-
-                        {% elif order.status == "Shipped" %}
-
-                        <span class="badge status-shipped p-2">
-                            🚚 Shipped
-                        </span>
-
-                        {% elif order.status == "Delivered" %}
-
-                        <span class="badge status-delivered p-2">
-                            ✅ Delivered
+                        <span class="badge bg-success">
+                            Paid
                         </span>
 
                         {% else %}
 
-                        <span class="badge status-cancelled p-2">
-                            ❌ Cancelled
+                        <span class="badge bg-danger">
+                            Pending
                         </span>
 
                         {% endif %}
 
-                        <hr>
+                    </td>
 
-                        <div class="progress mt-3">
+                    <td>
 
-                            {% if order.status == "Order Placed" %}
+                        {% if order.status == "Delivered" %}
 
-                            <div class="progress-bar bg-primary"
-                                 style="width:25%">
-                            </div>
+                        <span class="badge bg-success">
 
-                            {% elif order.status == "Packed" %}
+                            {{ order.status }}
 
-                            <div class="progress-bar bg-warning"
-                                 style="width:50%">
-                            </div>
+                        </span>
 
-                            {% elif order.status == "Shipped" %}
+                        {% elif order.status == "Shipped" %}
 
-                            <div class="progress-bar bg-info"
-                                 style="width:75%">
-                            </div>
+                        <span class="badge bg-primary">
 
-                            {% elif order.status == "Delivered" %}
+                            {{ order.status }}
 
-                            <div class="progress-bar bg-success"
-                                 style="width:100%">
-                            </div>
+                        </span>
 
-                            {% endif %}
+                        {% elif order.status == "Processing" %}
 
-                        </div>
+                        <span class="badge bg-warning text-dark">
 
-                    </div>
+                            {{ order.status }}
 
-                </div>
+                        </span>
 
-            </div>
+                        {% else %}
 
-            {% endfor %}
+                        <span class="badge bg-secondary">
 
-        </div>
+                            {{ order.status }}
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if order.created_at %}
+
+                            {{ order.created_at.strftime('%d-%m-%Y') }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
 
     {% else %}
 
-        <div class="text-center">
+    <div class="text-center">
 
-            <div class="card bg-dark text-white p-5">
+        <h3>No Orders Found</h3>
 
-                <h3>
-                    😔 No Orders Found
-                </h3>
+        <p class="text-muted">
+            You haven't placed any orders yet.
+        </p>
 
-                <p>
-                    Start shopping to see your orders here.
-                </p>
+        <a href="{{ url_for('home') }}"
+           class="btn btn-warning">
 
-                <a href="/"
-                   class="btn btn-warning">
+            Continue Shopping
 
-                    Shop Now
+        </a>
 
-                </a>
-
-            </div>
-
-        </div>
+    </div>
 
     {% endif %}
 
 </div>
 
-</body>
-
-</html>
+{% endblock %}

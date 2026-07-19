@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{{ product.name }} | Bundle
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row">
+
+        <!-- Product Image -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow border-0">
+
+                <img src="{{ url_for('static', filename='images/' + product.image) }}"
+                     class="img-fluid rounded"
+                     alt="{{ product.name }}">
+
+            </div>
+
+        </div>
+
+        <!-- Product Details -->
+
+        <div class="col-lg-6">
+
+            <h2 class="fw-bold">
+
+                {{ product.name }}
+
+            </h2>
+
+            <span class="badge bg-warning text-dark mb-3">
+
+                {{ product.category }}
+
+            </span>
+
+            <h3 class="text-success mb-3">
+
+                ₹{{ product.price }}
+
+            </h3>
+
+            <p class="text-muted">
+
+                {{ product.description }}
+
+            </p>
+
+            <hr>
+
+            <h5>
+
+                Product Highlights
+            </h5>
+
+            <ul>
+
+                <li>Premium Quality Fabric</li>
+
+                <li>Comfort Fit</li>
+
+                <li>Stylish Design</li>
+
+                <li>Easy Wash</li>
+
+                <li>Fast Delivery</li>
+
+            </ul>
+
+            <div class="mt-4">
+
+                <a href="{{ url_for('add_to_cart', product_id=product.id) }}"
+                   class="btn btn-warning btn-lg">
+
+                    <i class="bi bi-cart-fill"></i>
+
+                    Add To Cart
+
+                </a>
+
+                <a href="{{ url_for('home') }}"
+                   class="btn btn-outline-secondary btn-lg">
+
+                    Continue Shopping
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,5 +1,8 @@
-/* Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/* ===============================
+   GOOGLE FONT
+================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 *{
     margin:0;
@@ -8,346 +11,300 @@
     font-family:'Poppins',sans-serif;
 }
 
+/* ===============================
+   BODY
+================================ */
+
 body{
-
-    background:#F8F9FA;
-
-    color:#1F2937;
-
+    background:#f5f5f5;
+    color:#222;
 }
 
-/* Navbar */
+/* ===============================
+   NAVBAR
+================================ */
 
 .navbar{
-
-    background:#0A3D91 !important;
-
+    background:#111 !important;
 }
 
 .navbar-brand{
-
-    color:#FFC107 !important;
-
-    font-size:28px;
-
+    font-size:30px;
     font-weight:bold;
-
 }
 
 .nav-link{
-
     color:white !important;
-
-    transition:.3s;
-
+    margin-left:10px;
 }
 
 .nav-link:hover{
-
-    color:#FFC107 !important;
-
+    color:#ffc107 !important;
 }
 
-/* Hero */
-
-.hero{
-
-    background:linear-gradient(135deg,#0A3D91,#072F6B);
-
-    color:white;
-
-    padding:90px 20px;
-
-    border-radius:20px;
-
-    margin-bottom:40px;
-
-}
-
-.hero h1{
-
-    font-size:55px;
-
-    font-weight:700;
-
-}
-
-.hero p{
-
-    font-size:20px;
-
-}
-
-/* Cards */
-
-.card{
-
-    border:none;
-
-    border-radius:15px;
-
-    overflow:hidden;
-
-    transition:.3s;
-
-    box-shadow:0 8px 25px rgba(0,0,0,.12);
-
-    background:white;
-
-}
-
-.card:hover{
-
-    transform:translateY(-8px);
-
-}
-
-.card img{
-
-    height:280px;
-
-    object-fit:cover;
-
-}
-
-.card-title{
-
-    color:#0A3D91;
-
-    font-weight:600;
-
-}
-
-.price{
-
-    color:#FFC107;
-
-    font-size:22px;
-
-    font-weight:bold;
-
-}
-
-/* Buttons */
-
-.btn-primary{
-
-    background:#0A3D91;
-
-    border:none;
-
-}
-
-.btn-primary:hover{
-
-    background:#072F6B;
-
-}
+/* ===============================
+   BUTTONS
+================================ */
 
 .btn-warning{
-
-    background:#FFC107;
-
+    background:#ffc107;
     border:none;
-
-    color:black;
-
     font-weight:600;
-
 }
 
 .btn-warning:hover{
-
-    background:#E0A800;
-
+    background:#e6ac00;
 }
 
-.btn-outline-primary{
-
-    border:2px solid #0A3D91;
-
-    color:#0A3D91;
-
+.btn-dark:hover{
+    background:#000;
 }
 
-.btn-outline-primary:hover{
+/* ===============================
+   CAROUSEL
+================================ */
 
-    background:#0A3D91;
-
-    color:white;
-
-}
-
-/* Forms */
-
-.form-control{
-
-    border-radius:10px;
-
-}
-
-.form-control:focus{
-
-    border-color:#0A3D91;
-
-    box-shadow:0 0 8px rgba(10,61,145,.25);
-
-}
-
-/* Tables */
-
-.table{
-
-    border-radius:10px;
-
-    overflow:hidden;
-
-}
-
-.table-dark{
-
-    background:#0A3D91;
-
-}
-
-.table thead{
-
-    background:#0A3D91;
-
-    color:white;
-
-}
-
-/* Dashboard Cards */
-
-.dashboard-card{
-
-    background:white;
-
-    border-left:6px solid #FFC107;
-
+.carousel img{
     border-radius:15px;
-
-    box-shadow:0 8px 25px rgba(0,0,0,.1);
-
-    padding:25px;
-
 }
 
-.dashboard-card h2{
-
-    color:#0A3D91;
-
+.carousel-caption{
+    background:rgba(0,0,0,.45);
+    border-radius:15px;
+    padding:20px;
 }
 
-.dashboard-card p{
+/* ===============================
+   HEADINGS
+================================ */
 
-    color:#666;
-
+h2{
+    font-weight:700;
 }
 
-/* Footer */
+/* ===============================
+   CATEGORY CARDS
+================================ */
+
+.card{
+    border:none;
+    transition:.4s;
+    border-radius:15px;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.card img{
+    border-radius:15px 15px 0 0;
+}
+
+/* ===============================
+   PRODUCT CARD
+================================ */
+
+.card-title{
+    font-weight:600;
+}
+
+.text-success{
+    font-weight:bold;
+}
+
+.badge{
+    font-size:13px;
+}
+
+/* ===============================
+   PRODUCT IMAGE
+================================ */
+
+.card-img-top{
+    transition:.5s;
+}
+
+.card:hover .card-img-top{
+    transform:scale(1.05);
+}
+
+/* ===============================
+   WHY CHOOSE US
+================================ */
+
+.card h1{
+    font-size:55px;
+}
+
+/* ===============================
+   NEWSLETTER
+================================ */
+
+.bg-dark{
+    background:#111 !important;
+}
+
+.bg-dark input{
+    height:50px;
+}
+
+/* ===============================
+   FOOTER
+================================ */
 
 footer{
+    background:#111;
+}
 
-    background:#0A3D91;
-
-    color:white;
-
-    text-align:center;
-
-    padding:25px;
-
-    margin-top:70px;
-
+footer h4,
+footer h5{
+    color:#ffc107;
 }
 
 footer a{
+    color:white;
+}
 
-    color:#FFC107;
-
+footer a:hover{
+    color:#ffc107;
     text-decoration:none;
-
 }
 
-/* Badge */
+/* ===============================
+   SEARCH BAR
+================================ */
 
-.badge-status{
-
-    background:#FFC107;
-
-    color:black;
-
-    padding:8px 15px;
-
-    border-radius:50px;
-
+form input{
+    border-radius:30px;
 }
 
-/* Checkout */
-
-.checkout-card{
-
-    background:white;
-
-    border-radius:20px;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.12);
-
+form button{
+    border-radius:30px;
 }
 
-/* Admin */
+/* ===============================
+   PRODUCT PAGE
+================================ */
 
-.admin-title{
+.product-image{
+    border-radius:15px;
+}
 
-    color:#0A3D91;
-
+.product-price{
+    font-size:32px;
+    color:green;
     font-weight:bold;
+}
+
+.product-description{
+    color:#555;
+}
+
+/* ===============================
+   CART
+================================ */
+
+.table img{
+    border-radius:10px;
+}
+
+.table{
+    background:white;
+}
+
+/* ===============================
+   LOGIN & REGISTER
+================================ */
+
+.login-card,
+.register-card{
+
+    max-width:450px;
+    margin:auto;
+    margin-top:50px;
+    padding:30px;
+
+    border-radius:15px;
+
+    background:white;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.2);
 
 }
 
-.admin-menu{
+/* ===============================
+   ADMIN
+================================ */
 
-    background:white;
+.admin-card{
 
     border-radius:15px;
 
     padding:20px;
 
-}
+    text-align:center;
 
-/* Search */
-
-.search-box{
-
-    border-radius:50px;
+    color:white;
 
 }
 
-/* Product */
+.admin-card h2{
 
-.product-image{
-
-    border-radius:20px;
+    font-size:40px;
 
 }
 
-.product-title{
+/* ===============================
+   TABLES
+================================ */
 
-    color:#0A3D91;
+table{
 
-    font-size:35px;
-
-    font-weight:bold;
+    background:white;
 
 }
 
-.product-price{
+/* ===============================
+   SCROLLBAR
+================================ */
 
-    color:#FFC107;
+::-webkit-scrollbar{
 
-    font-size:28px;
+    width:8px;
 
-    font-weight:bold;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#ffc107;
+
+    border-radius:10px;
+
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media(max-width:768px){
+
+.carousel img{
+
+height:250px !important;
+
+}
+
+.navbar-brand{
+
+font-size:24px;
+
+}
+
+.card img{
+
+height:220px !important;
+
+}
 
 }
