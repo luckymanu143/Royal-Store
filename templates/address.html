@@ -1,208 +1,584 @@
 {% extends "base.html" %}
 
-{% block title %}Delivery Address - Bundle{% endblock %}
+{% block title %}Delivery Address - Royal Store{% endblock %}
 
 {% block content %}
 
-<div class="container my-5">
+<style>
+    .address-page {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-    <div class="row justify-content-center">
+    .page-title {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 32px;
+    }
 
-        <div class="col-lg-8">
+    .address-layout {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 30px;
+    }
 
-            <div class="card shadow-lg border-0">
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
 
-                <div class="card-header bg-warning">
+    .card h2 {
+        margin-top: 0;
+        margin-bottom: 25px;
+    }
 
-                    <h3 class="mb-0">
-                        Delivery Address
-                    </h3>
+    /* FORM */
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .required {
+        color: red;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 14px;
+        border: 1px solid #d6d6d6;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #111;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    /* PAYMENT */
+
+    .payment-section {
+        margin-top: 28px;
+    }
+
+    .payment-section h3 {
+        margin-bottom: 15px;
+        font-size: 20px;
+    }
+
+    .payment-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 16px;
+        margin-bottom: 12px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .payment-option:hover {
+        border-color: #111;
+        background: #fafafa;
+    }
+
+    .payment-option input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .payment-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .payment-title {
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .payment-description {
+        font-size: 13px;
+        color: #777;
+    }
+
+    .cod-message {
+        margin-top: 12px;
+        padding: 12px 15px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        color: #555;
+        font-size: 14px;
+    }
+
+    /* BUTTON */
+
+    .place-order-btn {
+        width: 100%;
+        padding: 15px;
+        margin-top: 25px;
+        border: none;
+        border-radius: 9px;
+        background: #111;
+        color: white;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .place-order-btn:hover {
+        background: #333;
+    }
+
+    /* ORDER SUMMARY */
+
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-item:last-child {
+        border-bottom: none;
+    }
+
+    .item-name {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .item-quantity {
+        font-size: 13px;
+        color: #777;
+    }
+
+    .item-price {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #eee;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .empty-cart {
+        color: #777;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 768px) {
+
+        .address-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .card {
+            padding: 20px;
+        }
+
+        .page-title {
+            font-size: 26px;
+        }
+    }
+</style>
+
+
+<div class="address-page">
+
+    <h1 class="page-title">
+        Delivery & Payment
+    </h1>
+
+
+    <div class="address-layout">
+
+
+        <!-- ================================= -->
+        <!-- DELIVERY ADDRESS -->
+        <!-- ================================= -->
+
+        <div class="card">
+
+            <h2>Delivery Address</h2>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('address') }}"
+            >
+
+                <!-- FULL NAME -->
+
+                <div class="form-group">
+
+                    <label for="fullname">
+                        Full Name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullname"
+                        name="fullname"
+                        placeholder="Enter your full name"
+                        required
+                    >
 
                 </div>
 
-                <div class="card-body">
 
-                    {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-success">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    {% endwith %}
+                <!-- MOBILE -->
 
-                    <form method="POST">
+                <div class="form-group">
 
-                        <div class="row">
+                    <label for="mobile">
+                        Mobile Number
+                        <span class="required">*</span>
+                    </label>
 
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-                                    Full Name
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="fullname"
-                                    required>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-                                    Mobile Number
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="mobile"
-                                    required>
-
-                            </div>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Email Address
-                            </label>
-
-                            <input
-                                type="email"
-                                class="form-control"
-                                name="email"
-                                required>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                House No / Building
-                            </label>
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                name="house"
-                                required>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Street / Area
-                            </label>
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                name="street"
-                                required>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-                                    City
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="city"
-                                    required>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-                                    State
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="state"
-                                    required>
-
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-                                    Pincode
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="pincode"
-                                    required>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-                                    Country
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="country"
-                                    value="India"
-                                    required>
-
-                            </div>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Landmark
-                            </label>
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                name="landmark">
-
-                        </div>
-
-                        <div class="d-grid mt-4">
-
-                            <button
-                                type="submit"
-                                class="btn btn-warning btn-lg">
-
-                                Save Address
-
-                            </button>
-
-                        </div>
-
-                    </form>
+                    <input
+                        type="tel"
+                        id="mobile"
+                        name="mobile"
+                        placeholder="Enter 10-digit mobile number"
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                        required
+                    >
 
                 </div>
 
-            </div>
+
+                <!-- ADDRESS -->
+
+                <div class="form-group">
+
+                    <label for="address">
+                        Address
+                        <span class="required">*</span>
+                    </label>
+
+                    <textarea
+                        id="address"
+                        name="address"
+                        rows="4"
+                        placeholder="House No, Street, Area"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <!-- CITY + STATE -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="city">
+                            City
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="city"
+                            name="city"
+                            placeholder="Enter city"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="state">
+                            State
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="state"
+                            name="state"
+                            placeholder="Enter state"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PINCODE -->
+
+                <div class="form-group">
+
+                    <label for="pincode">
+                        Pincode
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pincode"
+                        name="pincode"
+                        placeholder="Enter 6-digit pincode"
+                        maxlength="6"
+                        pattern="[0-9]{6}"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- LANDMARK -->
+
+                <div class="form-group">
+
+                    <label for="landmark">
+                        Landmark
+                    </label>
+
+                    <input
+                        type="text"
+                        id="landmark"
+                        name="landmark"
+                        placeholder="Nearby landmark (optional)"
+                    >
+
+                </div>
+
+
+                <!-- INSTRUCTIONS -->
+
+                <div class="form-group">
+
+                    <label for="instructions">
+                        Delivery Instructions
+                    </label>
+
+                    <textarea
+                        id="instructions"
+                        name="instructions"
+                        rows="3"
+                        placeholder="Any special delivery instructions? (optional)"
+                    ></textarea>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- PAYMENT METHOD -->
+                <!-- ================================= -->
+
+                <div class="payment-section">
+
+                    <h3>Payment Method</h3>
+
+
+                    <!-- ONLINE PAYMENT -->
+
+                    <label class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment_method"
+                            value="Online"
+                            required
+                        >
+
+                        <div class="payment-info">
+
+                            <span class="payment-title">
+                                💳 Online Payment
+                            </span>
+
+                            <span class="payment-description">
+                                Pay securely using Razorpay.
+                            </span>
+
+                        </div>
+
+                    </label>
+
+
+                    <!-- CASH ON DELIVERY -->
+
+                    <label class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment_method"
+                            value="COD"
+                        >
+
+                        <div class="payment-info">
+
+                            <span class="payment-title">
+                                💵 Cash on Delivery
+                            </span>
+
+                            <span class="payment-description">
+                                Pay cash when your order is delivered.
+                            </span>
+
+                        </div>
+
+                    </label>
+
+
+                    <div class="cod-message">
+
+                        <strong>Cash on Delivery:</strong>
+
+                        You can pay the delivery person in cash
+                        when your order arrives.
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- PLACE ORDER -->
+                <!-- ================================= -->
+
+                <button
+                    type="submit"
+                    class="place-order-btn"
+                >
+                    Place Order
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- ORDER SUMMARY -->
+        <!-- ================================= -->
+
+        <div class="card">
+
+            <h2>Order Summary</h2>
+
+
+            {% set cart_items = session.get('cart', []) %}
+
+
+            {% if cart_items %}
+
+                {% set calculated_total = namespace(value=0) %}
+
+
+                {% for item in cart_items %}
+
+                    {% set quantity = item.quantity
+                        if item.quantity is defined
+                        else 1
+                    %}
+
+                    {% set item_total = item.price * quantity %}
+
+                    {% set calculated_total.value =
+                        calculated_total.value + item_total
+                    %}
+
+
+                    <div class="order-item">
+
+                        <div>
+
+                            <div class="item-name">
+                                {{ item.name }}
+                            </div>
+
+                            <div class="item-quantity">
+                                Quantity: {{ quantity }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="item-price">
+
+                            ₹{{ item_total }}
+
+                        </div>
+
+                    </div>
+
+
+                {% endfor %}
+
+
+                <div class="total-row">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <span>
+                        ₹{{ calculated_total.value }}
+                    </span>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="empty-cart">
+
+                    Your cart is empty.
+
+                </div>
+
+            {% endif %}
 
         </div>
 

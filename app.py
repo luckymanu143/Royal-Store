@@ -39,7 +39,7 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "royalstoresecret"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///store.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Av%40271104@127.0.0.1:3306/bundle_store'
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -586,6 +586,7 @@ def remove_wishlist(product_id):
 
     return redirect(url_for("wishlist"))
 
+
 # =====================================================
 # Address
 # =====================================================
@@ -609,10 +610,19 @@ def address():
 
         session["payment_method"] = payment_method
 
+        # ONLINE PAYMENT
         if payment_method == "Online":
             return redirect(url_for("checkout"))
 
-        return redirect(url_for("success"))
+        # CASH ON DELIVERY
+        elif payment_method == "COD":
+            session["payment_status"] = "Pending"
+            session["payment_id"] = None
+
+            return redirect(url_for("success"))
+
+        flash("Please select a valid payment method.", "danger")
+        return redirect(url_for("address"))
 
     return render_template("address.html")
 
@@ -662,24 +672,55 @@ def checkout():
 
     )
 
-
 # =====================================================
-# Success
+# Success / Place Order
 # =====================================================
 
 @app.route("/success")
 @login_required
 def success():
 
+    # Get cart
     cart = session.get("cart", [])
 
+    # If cart is empty, go back to home
     if not cart:
+        flash("Your cart is empty.", "warning")
         return redirect(url_for("home"))
 
+    # Calculate total
     total = sum(
         item["price"] * item["quantity"]
         for item in cart
     )
+
+    # Get payment method
+    payment_method = session.get("payment_method")
+
+    # Safety check
+    if not payment_method:
+        flash("Please select a payment method.", "warning")
+        return redirect(url_for("address"))
+
+    # =================================================
+    # PAYMENT STATUS
+    # =================================================
+
+    if payment_method == "COD":
+        payment_status = "Pending"
+        payment_id = None
+
+    elif payment_method == "Online":
+        payment_status = "Paid"
+        payment_id = request.args.get("razorpay_payment_id")
+
+    else:
+        payment_status = "Pending"
+        payment_id = None
+
+    # =================================================
+    # CREATE ORDER
+    # =================================================
 
     order = Order(
 
@@ -703,23 +744,24 @@ def success():
 
         total=total,
 
-        payment_method=session.get("payment_method"),
+        payment_method=payment_method,
 
-        payment_status="Paid"
-        if session.get("payment_method") == "Online"
-        else "Pending",
+        payment_status=payment_status,
 
-        payment_id=request.args.get("razorpay_payment_id"),
+        payment_id=payment_id,
 
         status="Order Placed"
 
     )
 
+    # Save order
     db.session.add(order)
 
     db.session.commit()
 
-    # Save Ordered Products
+    # =================================================
+    # SAVE ORDER ITEMS
+    # =================================================
 
     for item in cart:
 
@@ -739,48 +781,55 @@ def success():
 
     db.session.commit()
 
-    # Clear Cart
+    # =================================================
+    # CLEAR CART
+    # =================================================
 
     session.pop("cart", None)
 
-    # Clear Address Data
+    # =================================================
+    # CLEAR CHECKOUT DATA
+    # =================================================
 
-    for key in [
+    session.pop("fullname", None)
+    session.pop("mobile", None)
+    session.pop("address", None)
+    session.pop("city", None)
+    session.pop("state", None)
+    session.pop("pincode", None)
+    session.pop("landmark", None)
+    session.pop("instructions", None)
+    session.pop("payment_method", None)
+    session.pop("payment_status", None)
+    session.pop("payment_id", None)
+    session.pop("total", None)
 
-        "fullname",
+    # =================================================
+    # SUCCESS MESSAGE
+    # =================================================
 
-        "mobile",
+    if payment_method == "COD":
 
-        "address",
+        flash(
+            "Order placed successfully! Pay cash when your order is delivered.",
+            "success"
+        )
 
-        "city",
+    else:
 
-        "state",
+        flash(
+            "Order placed successfully!",
+            "success"
+        )
 
-        "pincode",
-
-        "landmark",
-
-        "instructions",
-
-        "payment_method",
-
-        "total"
-
-    ]:
-
-        session.pop(key, None)
-
-    flash("Order placed successfully.", "success")
+    # =================================================
+    # SUCCESS PAGE
+    # =================================================
 
     return render_template(
-
         "success.html",
-
         order=order
-
     )
-
 
 # =====================================================
 # My Orders
